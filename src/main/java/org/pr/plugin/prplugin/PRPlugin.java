@@ -92,7 +92,7 @@ public class PRPlugin extends JavaPlugin implements Listener {
             }, 60L);
        }
         else{
-            p.sendMessage("Ключ 'MAGE_STAFF' отсутствует в данном предмете.");
+            p.sendMessage("Ключ  'MAGE_STAFF' отсутствует в данном предмете.");
         }
     }
 
