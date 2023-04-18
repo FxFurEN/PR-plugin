@@ -1,0 +1,4 @@
+name: PR plugin
+version: '${project.version}'
+main: org.pr.plugin.prplugin.PRPlugin
+api-version: 1.19
