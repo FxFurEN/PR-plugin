@@ -47,7 +47,7 @@ public class PRPlugin extends JavaPlugin implements Listener {
                         return;
                     }
 
-                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
+                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK  && p.isSneaking()) {
                         p.performCommand("emotes play \"ThrowAsnowball\"");
 
                         lastInteract.put(playerId, currentTime);
@@ -66,31 +66,7 @@ public class PRPlugin extends JavaPlugin implements Listener {
 
 
 
-    // тестовый ивент для воспроизведения анимации при сочетании клавиш, с оружие из mmoitems
-    @EventHandler
-    public void test_mmoitems(PlayerInteractEvent e) {
-        Player p = e.getPlayer();
-        ItemStack item = p.getInventory().getItemInMainHand();
 
-        if (item.getType() == Material.DIAMOND_HOE) {
-            UUID playerId = p.getUniqueId();
-            Long lastInteraction = lastInteract.get(playerId);
-            long currentTime = System.currentTimeMillis();
-            if (lastInteraction != null && currentTime - lastInteraction < cooldown) {
-                e.setCancelled(true);
-                return;
-            }
-            if (e.getAction() == Action.RIGHT_CLICK_AIR && p.isSneaking()) {
-                p.performCommand("emotes play \"Back Flip\"");
-
-                lastInteract.put(playerId, currentTime);
-            }
-            Bukkit.getServer().getScheduler().runTaskLater(this, () ->
-            {
-                p.performCommand("emotes stop ");
-            }, 60L);
-        }
-    }
 
     @Override
     public void onDisable() {
