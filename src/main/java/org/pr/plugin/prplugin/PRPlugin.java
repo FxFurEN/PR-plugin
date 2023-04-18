@@ -15,7 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class PRPlugin extends JavaPlugin implements Listener  {
+public class PRPlugin extends JavaPlugin implements Listener {
+
+    Map<UUID, Long> lastInteract = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -24,7 +26,7 @@ public class PRPlugin extends JavaPlugin implements Listener  {
 
     @EventHandler
     public void test_anim_show(PlayerInteractEvent e) {
-        Map<UUID, Long> lastInteract = new HashMap<>();
+
         int cooldown = 4000;
         Player p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
@@ -42,7 +44,7 @@ public class PRPlugin extends JavaPlugin implements Listener  {
                         return;
                     }
 
-                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
+                    if (e.getAction() == Action.RIGHT_CLICK_AIR && p.isSneaking()) {
                         p.performCommand("emotes play \"ThrowAsnowball\"");
 
                         lastInteract.put(playerId, currentTime);
@@ -60,9 +62,31 @@ public class PRPlugin extends JavaPlugin implements Listener  {
     }
 
     @EventHandler
-    public void test_mmoitems(PlayerInteractEvent e)
-    {
+    public void test_mmoitems(PlayerInteractEvent e) {
+        int cooldown = 4000;
 
+        Player p = e.getPlayer();
+        ItemStack item = p.getInventory().getItemInMainHand();
+
+        if (item.getType() == Material.DIAMOND_HOE) {
+            // Проверка, что игрок нажал SHIFT + ПКМ
+            UUID playerId = p.getUniqueId();
+            Long lastInteraction = lastInteract.get(playerId);
+            long currentTime = System.currentTimeMillis();
+            if (lastInteraction != null && currentTime - lastInteraction < cooldown) {
+                e.setCancelled(true);
+                return;
+            }
+            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
+                p.performCommand("emotes play \"ThrowAsnowball\"");
+
+                lastInteract.put(playerId, currentTime);
+            }
+            Bukkit.getServer().getScheduler().runTaskLater(this, () ->
+            {
+                p.performCommand("emotes stop ");
+            }, 60L);
+        }
     }
 
     @Override
