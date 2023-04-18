@@ -9,7 +9,7 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>PRplugin</name>
+    <name>PR-plugin</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -67,7 +67,7 @@
         </repository>
         <repository>
             <id>codemc-repo</id>
-            <url>https://repo.codemc.org/repository/maven-public/</url>
+            <url>https://repo.codemc.io/repository/maven-public/</url>
             <layout>default</layout>
         </repository>
     </repositories>
@@ -94,8 +94,8 @@
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api-plugin</artifactId>
-            <version>2.10.0</version>
+            <version>2.11.2</version>
+            <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

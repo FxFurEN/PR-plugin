@@ -1,5 +1,8 @@
 package org.pr.plugin.prplugin;
 
+
+import de.tr7zw.nbtapi.NBTItem;
+import net.Indyuce.mmoitems.api.item.mmoitem.MMOItem;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -67,11 +70,11 @@ public class PRPlugin extends JavaPlugin implements Listener {
 
     // тестовый ивент для воспроизведения анимации при сочетании клавиш, с оружие из mmoitems
     @EventHandler
-    public void test_mmoitems(PlayerInteractEvent e) {
+    public void test_items(PlayerInteractEvent e) {
         Player p = e.getPlayer();
         ItemStack item = p.getInventory().getItemInMainHand();
-
-        if (item.getType() == Material.DIAMOND_HOE) {
+        NBTItem nbtItem = new NBTItem(item);
+        if (nbtItem.hasKey("MAGE_STAFF")) {
             UUID playerId = p.getUniqueId();
             Long lastInteraction = lastInteract.get(playerId);
             long currentTime = System.currentTimeMillis();
@@ -81,15 +84,18 @@ public class PRPlugin extends JavaPlugin implements Listener {
             }
             if (e.getAction() == Action.RIGHT_CLICK_AIR && p.isSneaking()) {
                 p.performCommand("emotes play \"Back Flip\"");
-
                 lastInteract.put(playerId, currentTime);
             }
             Bukkit.getServer().getScheduler().runTaskLater(this, () ->
             {
                 p.performCommand("emotes stop ");
             }, 60L);
+       }
+        else{
+            p.sendMessage("Ключ 'MAGE_STAFF' отсутствует в данном предмете.");
         }
     }
+
 
 
     @Override
