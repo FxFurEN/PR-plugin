@@ -18,16 +18,19 @@ import java.util.UUID;
 public class PRPlugin extends JavaPlugin implements Listener {
 
     Map<UUID, Long> lastInteract = new HashMap<>();
+    int cooldown = 4000;
 
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
     }
 
+
+    // тестовый ивент для воспроизведения анимации при сочетании клавиш по блоку снега
     @EventHandler
     public void test_anim_show(PlayerInteractEvent e) {
 
-        int cooldown = 4000;
+
         Player p = e.getPlayer();
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
             Block block = e.getClickedBlock();
@@ -44,7 +47,7 @@ public class PRPlugin extends JavaPlugin implements Listener {
                         return;
                     }
 
-                    if (e.getAction() == Action.RIGHT_CLICK_AIR && p.isSneaking()) {
+                    if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
                         p.performCommand("emotes play \"ThrowAsnowball\"");
 
                         lastInteract.put(playerId, currentTime);
@@ -61,15 +64,15 @@ public class PRPlugin extends JavaPlugin implements Listener {
         }
     }
 
+
+
+    // тестовый ивент для воспроизведения анимации при сочетании клавиш, с оружие из mmoitems
     @EventHandler
     public void test_mmoitems(PlayerInteractEvent e) {
-        int cooldown = 4000;
-
         Player p = e.getPlayer();
         ItemStack item = p.getInventory().getItemInMainHand();
 
         if (item.getType() == Material.DIAMOND_HOE) {
-            // Проверка, что игрок нажал SHIFT + ПКМ
             UUID playerId = p.getUniqueId();
             Long lastInteraction = lastInteract.get(playerId);
             long currentTime = System.currentTimeMillis();
@@ -77,8 +80,8 @@ public class PRPlugin extends JavaPlugin implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (e.getAction() == Action.RIGHT_CLICK_BLOCK && p.isSneaking()) {
-                p.performCommand("emotes play \"ThrowAsnowball\"");
+            if (e.getAction() == Action.RIGHT_CLICK_AIR && p.isSneaking()) {
+                p.performCommand("emotes play \"Back Flip\"");
 
                 lastInteract.put(playerId, currentTime);
             }
